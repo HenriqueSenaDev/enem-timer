@@ -1,0 +1,44 @@
+.button-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+}
+
+button {
+  font-size: 11px;
+  background-color: #13174B;
+  padding: 7px 10px;
+  border-radius: 8px;
+  max-width: 115px;
+  color: #FFF;
+  border: 0;
+  cursor: pointer;
+  width: 100%;
+  font-family: 'Poppins';
+}
+
+.button-wrapper span {
+  display: none;
+}
+
+@media(min-width: 992px) {
+  button {
+    font-size: 12.5px;
+    padding: 9px 10px;
+    max-width: 140px;
+  }
+
+  .button-wrapper {
+    gap: 6px;
+  }
+
+  .button-wrapper span {
+    display: unset;
+    font-family: 'Poppins';
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 0.5px;
+  }
+}
