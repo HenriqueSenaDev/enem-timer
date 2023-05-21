@@ -58,7 +58,7 @@ function Questions() {
                 text='Iniciar'
                 primary
                 shortcut='Enter'
-                onClick={() => {}}
+                onClick={() => setIsRunning(true)}
               />
             )}
           </div>
