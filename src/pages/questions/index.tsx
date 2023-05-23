@@ -2,18 +2,31 @@ import { useState } from 'react';
 import Button from '../../components/button';
 import Timer from './components/timer';
 import TimeTable from './components/timetable';
+import QuestionTimeModal from './components/question-time-modal';
 import './styles.css';
 
 function Questions() {
+  const [isTimeModalOpen, setIsTimeModalOpen] = useState<boolean>(true);
+  const [questionSpecification, setQuestionSpecification] = useState<
+    string | null
+  >(null);
   const [isRunning, setIsRunning] = useState<boolean>(false);
 
   return (
     <div className='questions-wrapper'>
+      {isTimeModalOpen && (
+        <QuestionTimeModal
+          setIsTimeModalOpen={setIsTimeModalOpen}
+          questionSpecification={questionSpecification}
+          setQuestionSpecification={setQuestionSpecification}
+        />
+      )}
+
       <div className='questions-container'>
         <div className='questions-header'>
           <h1>Questões Infinitas</h1>
 
-          <p>Enem 1º dia (com 1h30 de Redação) - 2m30s</p>
+          <p>{questionSpecification || 'Indefinido'}</p>
         </div>
 
         <div className='timer-area'>

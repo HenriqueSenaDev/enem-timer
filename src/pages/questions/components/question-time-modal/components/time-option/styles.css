@@ -1,0 +1,45 @@
+.time-option {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 28px;
+  transition: all ease 0.15s;
+}
+
+.time-option:hover,
+.active-option {
+  background-color: #121a62;
+}
+
+.time-option-duration {
+  text-align: right;
+}
+
+.time-option-description h1,
+.time-option-duration h1 {
+  font-size: 14px;
+}
+
+.time-option-description h1,
+.time-option-duration p {
+  margin-bottom: 4px;
+}
+
+.time-option-description p,
+.time-option-duration p {
+  font-size: 11px;
+  font-weight: 300;
+}
+
+@media(min-width: 992px) {
+
+  .time-option-description h1,
+  .time-option-duration h1 {
+    font-size: 16px;
+  }
+
+  .time-option-description p,
+  .time-option-duration p {
+    font-size: 14px;
+  }
+}
