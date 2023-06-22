@@ -22,7 +22,7 @@ function TimeOption({
   setQuestionSpecification,
 }: IProps) {
   function getQuestionSpecification() {
-    let questionSpecification = `${title}: ${description}`;
+    let questionSpecification = `${title} | ${description}`;
     questionSpecification += ` - ${time}`;
     if (extraNote != '') questionSpecification += ` (${extraNote})`;
 

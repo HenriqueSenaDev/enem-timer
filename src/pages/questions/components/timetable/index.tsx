@@ -1,6 +1,17 @@
 import './styles.css';
 
-function TimeTable() {
+interface IProps {
+  questionsTime: {
+    general: string;
+    current: string;
+  }[];
+}
+
+function TimeTable({ questionsTime }: IProps) {
+  function getTimeColor(timeString: string) {
+    return timeString.at(0) === '+' ? 'green' : 'red';
+  }
+
   return (
     <div className='time-table-card'>
       <div className='table-header'>
@@ -11,76 +22,13 @@ function TimeTable() {
         <span>Geral</span>
       </div>
 
-      <div className='question-time'>
-        <span className='red'>-00:00:00</span>
+      {questionsTime.map(({ current, general }) => (
+        <div className='question-time'>
+          <span className={getTimeColor(current)}>{current}</span>
 
-        <span className='green'>+00:00:00</span>
-      </div>
-
-      <div className='question-time'>
-        <span className='red'>-00:00:00</span>
-
-        <span className='green'>+00:00:00</span>
-      </div>
-
-      <div className='question-time'>
-        <span className='red'>-00:00:00</span>
-
-        <span className='green'>+00:00:00</span>
-      </div>
-
-      <div className='question-time'>
-        <span className='red'>-00:00:00</span>
-
-        <span className='green'>+00:00:00</span>
-      </div>
-
-      <div className='question-time'>
-        <span className='red'>-00:00:00</span>
-
-        <span className='green'>+00:00:00</span>
-      </div>
-
-      <div className='question-time'>
-        <span className='red'>-00:00:00</span>
-
-        <span className='green'>+00:00:00</span>
-      </div>
-      <div className='question-time'>
-        <span className='red'>-00:00:00</span>
-
-        <span className='green'>+00:00:00</span>
-      </div>
-      <div className='question-time'>
-        <span className='red'>-00:00:00</span>
-
-        <span className='green'>+00:00:00</span>
-      </div>
-      <div className='question-time'>
-        <span className='red'>-00:00:00</span>
-
-        <span className='green'>+00:00:00</span>
-      </div>
-      <div className='question-time'>
-        <span className='red'>-00:00:00</span>
-
-        <span className='green'>+00:00:00</span>
-      </div>
-      <div className='question-time'>
-        <span className='red'>-00:00:00</span>
-
-        <span className='green'>+00:00:00</span>
-      </div>
-      <div className='question-time'>
-        <span className='red'>-00:00:00</span>
-
-        <span className='green'>+00:00:00</span>
-      </div>
-      <div className='question-time'>
-        <span className='red'>-00:00:00</span>
-
-        <span className='green'>+00:00:00</span>
-      </div>
+          <span className={getTimeColor(general)}>{general}</span>
+        </div>
+      ))}
     </div>
   );
 }

@@ -1,16 +1,39 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from '../../components/button';
 import Timer from './components/timer';
 import TimeTable from './components/timetable';
 import QuestionTimeModal from './components/question-time-modal';
 import './styles.css';
 
+interface QuestionTime {
+  general: string;
+  current: string;
+}
+
 function Questions() {
   const [isTimeModalOpen, setIsTimeModalOpen] = useState<boolean>(true);
   const [questionSpecification, setQuestionSpecification] = useState<
     string | null
   >(null);
+  const [secondsPerQuestion, setSecondsPerQuestion] = useState<number | null>(
+    null,
+  );
   const [isRunning, setIsRunning] = useState<boolean>(false);
+  const [questionsTime, setQuestionsTime] = useState<QuestionTime[]>([]);
+
+  function getSecondsPerQuestion() {
+    const timeString = questionSpecification!.split('-')[1];
+    const timeWithoutNote = timeString.split('(')[0];
+    const [minutes, seconds] = timeWithoutNote.split('m');
+
+    return Number(minutes) * 60 + Number(seconds);
+  }
+
+  useEffect(() => {
+    if (questionSpecification) {
+      setSecondsPerQuestion(getSecondsPerQuestion());
+    }
+  }, [questionSpecification]);
 
   return (
     <div className='questions-wrapper'>
@@ -32,7 +55,7 @@ function Questions() {
         <div className='timer-area'>
           <Timer />
 
-          <TimeTable />
+          <TimeTable questionsTime={questionsTime} />
 
           <div className='timer-buttons'>
             {isRunning ? (
