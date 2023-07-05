@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import './styles.css';
 
 interface IHomeCardProps {
-  header: string,
-  imgSource: string,
-  items: string[],
-  linkTo: string,
-  style?: CSSProperties
+  header: string;
+  imgSource: string;
+  items: string[];
+  linkTo: string;
+  style?: CSSProperties;
 }
 
 function HomeCard({ header, imgSource, items, linkTo, style }: IHomeCardProps) {
@@ -22,13 +22,15 @@ function HomeCard({ header, imgSource, items, linkTo, style }: IHomeCardProps) {
       <h1>{header}</h1>
 
       <div className='home-card-img-area'>
-        <div className="home-card-blur" />
+        <div className='home-card-blur' />
 
         <img src={imgSource} alt={header} />
       </div>
 
       <ul className='home-card-items'>
-        {items.map(item => <li key={item}>• {item}</li>)}
+        {items.map(item => (
+          <li key={item}>• {item}</li>
+        ))}
       </ul>
     </div>
   );

@@ -9,6 +9,9 @@ import essayIcon from '../../assets/essay.svg';
 import './styles.css';
 
 function Home() {
+  const [isDesktop, setIsDesktop] = useState<boolean>(
+    document.body.clientWidth >= 992,
+  );
   const [currentCardIndex, setCurrentCardIndex] = useState<number>(1);
 
   const cards = [
@@ -35,23 +38,33 @@ function Home() {
     />,
   ];
 
+  window.addEventListener('resize', () =>
+    setIsDesktop(document.body.clientWidth >= 992),
+  );
+
   return (
     <div>
       <div className='home-container'>
         <h1 className='main-header'>Enem Timer</h1>
 
-        {currentCardIndex > 0 && (
-          <img className='card-left-arrow' src={leftArrow} alt='left arrow'
+        {!isDesktop && currentCardIndex > 0 && (
+          <img
+            className='card-left-arrow'
+            src={leftArrow}
+            alt='left arrow'
             onClick={() => setCurrentCardIndex(currentCardIndex - 1)}
           />
         )}
 
-        <div className='home-cards-area' >
-          {document.body.clientWidth < 992 ? cards[currentCardIndex] : cards}
+        <div className='home-cards-area'>
+          {isDesktop ? cards : cards[currentCardIndex]}
         </div>
 
-        {currentCardIndex < 2 && (
-          <img className='card-right-arrow' src={rightArrow} alt='right arrow'
+        {!isDesktop && currentCardIndex < 2 && (
+          <img
+            className='card-right-arrow'
+            src={rightArrow}
+            alt='right arrow'
             onClick={() => setCurrentCardIndex(currentCardIndex + 1)}
           />
         )}

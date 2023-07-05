@@ -1,5 +1,5 @@
 footer {
-  background-color: #000;
+  background: linear-gradient(rgba(0, 0, 0, 80%) 15%, #000);
   padding: 14px 38px 18px 38px;
   display: flex;
   align-items: center;
