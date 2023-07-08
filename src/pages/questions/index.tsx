@@ -47,7 +47,10 @@ function Questions() {
         </div>
 
         <div className='timer-area'>
-          <Timer />
+          <Timer
+            secondsPerQuestion={secondsPerQuestion}
+            isRunning={isRunning}
+          />
 
           <TimeTable questionsTime={questionsTime} />
 
