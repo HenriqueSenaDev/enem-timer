@@ -12,25 +12,19 @@ interface IProps {
 }
 
 function TimeOption({
-  title,
-  description,
-  extraNote,
-  time,
-  index,
-  activeIndex,
-  setActiveIndex,
-  setQuestionSpecification,
+  title, description, extraNote, time, index, activeIndex,
+  setActiveIndex, setQuestionSpecification
 }: IProps) {
-  function getQuestionSpecification() {
-    let questionSpecification = `${title} | ${description}`;
-    questionSpecification += ` - ${time}`;
-    if (extraNote != '') questionSpecification += ` (${extraNote})`;
+
+  function assembleQuestionSpecification() {
+    let questionSpecification = `${title} | ${description} - ${time}`;
+    if (extraNote) questionSpecification += ` (${extraNote})`;
 
     return questionSpecification;
   }
 
   function selectOption() {
-    setQuestionSpecification(getQuestionSpecification());
+    setQuestionSpecification(assembleQuestionSpecification());
     setActiveIndex(index);
   }
 

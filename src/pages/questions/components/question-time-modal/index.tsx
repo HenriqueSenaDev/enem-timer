@@ -18,15 +18,13 @@ function QuestionTimeModal({
 
   function closeModal() {
     if (!questionSpecification)
-      return alert('Selecione/Insira uma duração por questão.');
+      return alert('Selecione ou insira uma duração por questão.');
 
     setIsTimeModalOpen(false);
   }
 
   function checkOutClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-    if (
-      event.target === document.querySelector('.question-time-modal-wrapper')
-    ) {
+    if (event.target === document.querySelector('.question-time-modal-wrapper')) {
       closeModal();
     }
   }
@@ -71,7 +69,12 @@ function QuestionTimeModal({
           />
         </div>
 
-        <Button text='Confirmar' shortcut='' primary onClick={closeModal} />
+        <Button
+          text='Confirmar'
+          shortcut=''
+          primary
+          onClick={closeModal}
+        />
       </div>
     </div>
   );

@@ -12,28 +12,22 @@ interface QuestionTime {
 
 function Questions() {
   const [isTimeModalOpen, setIsTimeModalOpen] = useState<boolean>(true);
-  const [questionSpecification, setQuestionSpecification] = useState<
-    string | null
-  >(null);
-  const [secondsPerQuestion, setSecondsPerQuestion] = useState<number | null>(
-    null,
-  );
+  const [questionSpecification, setQuestionSpecification] = useState<string | null>(null);
+  const [secondsPerQuestion, setSecondsPerQuestion] = useState<number | null>(null);
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [questionsTime, setQuestionsTime] = useState<QuestionTime[]>([]);
 
   function getSecondsPerQuestion() {
     const timeString = questionSpecification!.split('-')[1];
-    const timeWithoutNote = timeString.split('(')[0];
-    const [minutes, seconds] = timeWithoutNote.split('m');
+    const timeWithoutExtraNote = timeString.split('(')[0];
+    const [minutes, seconds] = timeWithoutExtraNote.split('m');
 
-    return Number(minutes) * 60 + Number(seconds);
+    setSecondsPerQuestion(Number(minutes) * 60 + Number(seconds));
   }
 
   useEffect(() => {
-    if (questionSpecification) {
-      setSecondsPerQuestion(getSecondsPerQuestion());
-    }
-  }, [questionSpecification]);
+    if (questionSpecification) getSecondsPerQuestion();
+  }), [questionSpecification];
 
   return (
     <div className='questions-wrapper'>
@@ -85,7 +79,7 @@ function Questions() {
                     text='Finalizar'
                     primary
                     shortcut='Enter'
-                    onClick={() => {}}
+                    onClick={() => setIsRunning(false)}
                   />
                 </div>
               </div>
