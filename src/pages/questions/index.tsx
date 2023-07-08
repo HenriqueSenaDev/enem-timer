@@ -15,6 +15,7 @@ function Questions() {
   const [questionSpecification, setQuestionSpecification] = useState<string | null>(null);
   const [secondsPerQuestion, setSecondsPerQuestion] = useState<number | null>(null);
   const [isRunning, setIsRunning] = useState<boolean>(false);
+  const [isPaused, setIsPaused] = useState<boolean>(false);
   const [questionsTime, setQuestionsTime] = useState<QuestionTime[]>([]);
 
   function getSecondsPerQuestion() {
@@ -50,6 +51,9 @@ function Questions() {
           <Timer
             secondsPerQuestion={secondsPerQuestion}
             isRunning={isRunning}
+            setIsRunning={setIsRunning}
+            isPaused={isPaused}
+            setIsPaused={setIsPaused}
           />
 
           <TimeTable questionsTime={questionsTime} />
