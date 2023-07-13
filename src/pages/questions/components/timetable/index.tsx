@@ -2,7 +2,7 @@ import './styles.css';
 
 interface IProps {
   questionsTime: {
-    general: string;
+    overall: string;
     current: string;
   }[];
 }
@@ -22,11 +22,14 @@ function TimeTable({ questionsTime }: IProps) {
         <span>Geral</span>
       </div>
 
-      {questionsTime.map(({ current, general }) => (
-        <div className='question-time'>
+      {questionsTime.map(({ current, overall }, index) => (
+        <div
+          key={index}
+          className='question-time'
+        >
           <span className={getTimeColor(current)}>{current}</span>
 
-          <span className={getTimeColor(general)}>{general}</span>
+          <span className={getTimeColor(overall)}>{overall}</span>
         </div>
       ))}
     </div>

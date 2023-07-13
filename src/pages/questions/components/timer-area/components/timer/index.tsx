@@ -1,3 +1,4 @@
+import { milisToFormattedTime } from '../../utils/timer-utils';
 import pauseIcon from '../../../../../../assets/pause.svg';
 import "./styles.css";
 
@@ -10,22 +11,6 @@ interface IProps {
 }
 
 function Timer({ currentMilis, overaalMilis, isPaused, setIsPaused }: IProps) {
-  function milisToFormattedTime(milis: number) {
-    function doubleDigitTimeCheck(value: number) {
-      return value >= 10 ? `${value}` : `0${value}`;
-    }
-
-    const minutes = Math.floor(milis / 1000 / 60);
-    const seconds = Math.floor((milis - (1000 * 60 * minutes)) / 1000);
-    const milisseconds = milis - ((1000 * 60 * minutes) + (1000 * seconds));
-
-    const fomarttedMinutes = doubleDigitTimeCheck(minutes);
-    const formattedSeconds = doubleDigitTimeCheck(seconds);
-    const formattedMilisseconds = milisseconds != 0 ? milisseconds.toString().substring(0, 2) : '00';
-
-    return `${fomarttedMinutes}:${formattedSeconds}:${formattedMilisseconds}`;
-  }
-
   return (
     <div className='timer-container'>
       <h1 className='current-time'>

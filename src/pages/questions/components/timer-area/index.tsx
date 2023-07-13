@@ -1,24 +1,25 @@
 import { useState, useEffect } from 'react';
+import { milisToFormattedTime } from './utils/timer-utils';
 import TimeTable from '../timetable';
 import Button from '../../../../components/button';
 import Timer from './components/timer';
 import './styles.css';
 
 interface IProps {
-  secondsPerQuestion: number | null;
+  milissecondsPerQuestion: number | null;
 }
 
-interface QuestionTime {
-  general: string;
+interface IQuestionTime {
   current: string;
+  overall: string;
 }
 
-function TimerArea({ secondsPerQuestion }: IProps) {
+function TimerArea({ milissecondsPerQuestion }: IProps) {
   const [currentMilis, setCurrentMilis] = useState<number>(0);
   const [overallMilis, setOverallMilis] = useState<number>(0);
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [isPaused, setIsPaused] = useState<boolean>(false);
-  const [questionsTime, setQuestionsTime] = useState<QuestionTime[]>([]);
+  const [questionsTime, setQuestionsTime] = useState<IQuestionTime[]>([]);
 
   function startTimer() {
     setIsRunning(true);
@@ -33,6 +34,19 @@ function TimerArea({ secondsPerQuestion }: IProps) {
 
   function resetQuestion() {
     setOverallMilis(overallMilis - currentMilis);
+    setCurrentMilis(0);
+  }
+
+  function nextQuestion() {
+    const currentRest = milissecondsPerQuestion as number - currentMilis;
+    const isCurrentRestPositive = currentRest > 0;
+    let current = `${isCurrentRestPositive ? '+' : '-'}${milisToFormattedTime(currentRest)}`;
+
+    const overallRest = (milissecondsPerQuestion as number * (questionsTime.length + 1)) - overallMilis;
+    const isOverallRestPositive = overallRest > 0;
+    let overall = `${isOverallRestPositive ? '+' : '-'}${milisToFormattedTime(overallRest)}`;
+
+    setQuestionsTime([...questionsTime, { current, overall }]);
     setCurrentMilis(0);
   }
 
@@ -77,7 +91,7 @@ function TimerArea({ secondsPerQuestion }: IProps) {
               <Button
                 text='Próxima questão'
                 shortcut='Space Bar'
-                onClick={() => { }}
+                onClick={nextQuestion}
               />
             </div>
 

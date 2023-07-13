@@ -6,18 +6,18 @@ import './styles.css';
 function Questions() {
   const [isTimeModalOpen, setIsTimeModalOpen] = useState<boolean>(true);
   const [questionSpecification, setQuestionSpecification] = useState<string | null>(null);
-  const [secondsPerQuestion, setSecondsPerQuestion] = useState<number | null>(null);
+  const [milissecondsPerQuestion, setMilissecondsPerQuestion] = useState<number | null>(null);
 
-  function getSecondsPerQuestion() {
-    const timeString = questionSpecification!.split('-')[1];
+  function getMilissecondsPerQuestion() {
+    const timeString = questionSpecification!.split('-')[2];
     const timeWithoutExtraNote = timeString.split('(')[0];
     const [minutes, seconds] = timeWithoutExtraNote.split('m');
 
-    setSecondsPerQuestion(Number(minutes) * 60 + Number(seconds));
+    setMilissecondsPerQuestion((Number(minutes) * 60 + Number(seconds)) * 1000);
   }
 
   useEffect(() => {
-    if (questionSpecification) getSecondsPerQuestion();
+    if (questionSpecification) getMilissecondsPerQuestion();
   }), [questionSpecification];
 
   return (
@@ -37,7 +37,7 @@ function Questions() {
           <p>{questionSpecification || 'Indefinido'}</p>
         </div>
 
-        <TimerArea secondsPerQuestion={secondsPerQuestion} />
+        <TimerArea milissecondsPerQuestion={milissecondsPerQuestion} />
       </div>
     </div>
   );
