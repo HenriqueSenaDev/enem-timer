@@ -1,4 +1,5 @@
 import { milisToFormattedTime } from '../../utils/timer-utils';
+import { ReactComponent as HideTimeVector } from '../../../../../../assets/hide-time.svg';
 import pauseIcon from '../../../../../../assets/pause.svg';
 import "./styles.css";
 
@@ -7,19 +8,24 @@ interface IProps {
   overaalMilis: number;
   isPaused: boolean;
   setIsPaused: (conditional: boolean) => void;
-  isRunning: boolean;
+  isTimeHidden: boolean;
 }
 
-function Timer({ currentMilis, overaalMilis, isPaused, setIsPaused }: IProps) {
+function Timer({ currentMilis, overaalMilis, isPaused, setIsPaused, isTimeHidden }: IProps) {
   return (
     <div className='timer-container'>
-      <h1 className='current-time'>
-        {milisToFormattedTime(currentMilis)}
-      </h1>
+      {isTimeHidden
+        ? <HideTimeVector className='hide-time' />
+        : <>
+          <h1 className='current-time'>
+            {milisToFormattedTime(currentMilis)}
+          </h1>
 
-      <h2 className='overall-time'>
-        {milisToFormattedTime(overaalMilis)}
-      </h2>
+          <h2 className='overall-time'>
+            {milisToFormattedTime(overaalMilis)}
+          </h2>
+        </>
+      }
 
       <img
         src={pauseIcon}

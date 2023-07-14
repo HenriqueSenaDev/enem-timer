@@ -19,10 +19,12 @@ function TimerArea({ milissecondsPerQuestion }: IProps) {
   const [overallMilis, setOverallMilis] = useState<number>(0);
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [isPaused, setIsPaused] = useState<boolean>(false);
+  const [isTimeHidden, setIsTimeHidden] = useState<boolean>(false);
   const [questionsTime, setQuestionsTime] = useState<IQuestionTime[]>([]);
 
   function startTimer() {
     setIsRunning(true);
+    setQuestionsTime([]);
   }
 
   function finishTimer() {
@@ -50,6 +52,10 @@ function TimerArea({ milissecondsPerQuestion }: IProps) {
     setCurrentMilis(0);
   }
 
+  function toogleTime() {
+    setIsTimeHidden(!isTimeHidden);
+  }
+
   // timer interval
   useEffect(() => {
     let intervalId: number | null = null;
@@ -73,10 +79,13 @@ function TimerArea({ milissecondsPerQuestion }: IProps) {
         overaalMilis={overallMilis}
         isPaused={isPaused}
         setIsPaused={setIsPaused}
-        isRunning={isRunning}
+        isTimeHidden={isTimeHidden}
       />
 
-      <TimeTable questionsTime={questionsTime} />
+      <TimeTable
+        questionsTime={questionsTime}
+        isTimeHidden={isTimeHidden}
+      />
 
       <div className='timer-buttons'>
         {isRunning ? (
@@ -97,9 +106,9 @@ function TimerArea({ milissecondsPerQuestion }: IProps) {
 
             <div className='options-row'>
               <Button
-                text='Esconder tabela'
+                text={`${isTimeHidden ? 'Revelar' : 'Esconder'} tempo`}
                 shortcut='T'
-                onClick={() => { }}
+                onClick={toogleTime}
               />
 
               <Button

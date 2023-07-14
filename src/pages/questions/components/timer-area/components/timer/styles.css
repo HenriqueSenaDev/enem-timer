@@ -6,6 +6,8 @@
   font-family: 'IBM Plex Mono';
   line-height: 1.2;
   letter-spacing: 1px;
+  position: relative;
+  height: 190px;
 }
 
 .current-time {
@@ -26,6 +28,11 @@
   cursor: pointer;
 }
 
+.hide-time {
+  height: 130%;
+  width: auto;
+}
+
 @media(min-width: 992px) {
   .current-time {
     font-size: 76px;
@@ -38,5 +45,9 @@
   .timer-container img {
     margin-top: 10px;
     width: 27px;
+  }
+
+  .hide-time {
+    transform: scale(1.2) translateY(-10%);
   }
 }
