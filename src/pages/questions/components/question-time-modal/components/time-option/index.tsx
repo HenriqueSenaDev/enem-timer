@@ -1,3 +1,5 @@
+import { useContext } from 'react';
+import { TimerContext } from '../../../../../../contexts/timer';
 import './styles.css';
 
 interface IProps {
@@ -5,16 +7,10 @@ interface IProps {
   description: string;
   extraNote: string;
   time: string;
-  index: number;
-  activeIndex: number | null;
-  setActiveIndex: (newActiveIndex: number) => void;
-  setQuestionSpecification: (newQuestionSpecification: string) => void;
 }
 
-function TimeOption({
-  title, description, extraNote, time, index, activeIndex,
-  setActiveIndex, setQuestionSpecification
-}: IProps) {
+function TimeOption({ title, description, extraNote, time, }: IProps) {
+  const { setTimeOptionInfo } = useContext(TimerContext);
 
   function assembleQuestionSpecification() {
     let questionSpecification = `${title} | ${description} - ${time}`;
@@ -24,16 +20,14 @@ function TimeOption({
   }
 
   function selectOption() {
-    setQuestionSpecification(assembleQuestionSpecification());
-    setActiveIndex(index);
+    setTimeOptionInfo({
+      timeSpecification: assembleQuestionSpecification(),
+      time
+    });
   }
 
   return (
-    <div
-      className='time-option'
-      onClick={selectOption}
-      style={index == activeIndex ? { backgroundColor: '#121a62' } : {}}
-    >
+    <button className='time-option'onClick={selectOption}>
       <div className='time-option-description'>
         <h1>{title}</h1>
 
@@ -45,7 +39,7 @@ function TimeOption({
 
         <h1>{time}</h1>
       </div>
-    </div>
+    </button>
   );
 }
 

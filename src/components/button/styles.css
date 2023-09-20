@@ -6,7 +6,7 @@
   width: 50%;
 }
 
-button {
+.button-wrapper button {
   font-size: 11px;
   background-color: #13174B;
   padding: 7px 10px;
@@ -24,7 +24,7 @@ button {
 }
 
 @media(min-width: 992px) {
-  button {
+  .button-wrapper button {
     font-size: 12.5px;
     padding: 9px 10px;
     max-width: 140px;
