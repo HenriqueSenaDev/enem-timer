@@ -1,26 +1,25 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { TimerContext } from '../../../../contexts/timer';
 import { milisToFormattedTime } from './utils/timer-utils';
-import TimeTable from '../timetable';
+import TimeTable from './components/timetable';
 import Button from '../../../../components/button';
 import Timer from './components/timer';
 import './styles.css';
-
-interface IProps {
-  milissecondsPerQuestion: number | null;
-}
 
 interface IQuestionTime {
   current: string;
   overall: string;
 }
 
-function TimerArea({ milissecondsPerQuestion }: IProps) {
+function TimerArea() {
   const [currentMilis, setCurrentMilis] = useState<number>(0);
   const [overallMilis, setOverallMilis] = useState<number>(0);
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const [isTimeHidden, setIsTimeHidden] = useState<boolean>(false);
   const [questionsTime, setQuestionsTime] = useState<IQuestionTime[]>([]);
+
+  const { milissecondsPerQuestion } = useContext(TimerContext);
 
   function startTimer() {
     setIsRunning(true);
@@ -32,6 +31,7 @@ function TimerArea({ milissecondsPerQuestion }: IProps) {
     setIsPaused(false);
     setCurrentMilis(0);
     setOverallMilis(0);
+    setIsTimeHidden(false);
   }
 
   function resetQuestion() {
