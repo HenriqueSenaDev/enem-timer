@@ -18,11 +18,11 @@ function Timer({ currentMilis, overaalMilis, isPaused, setIsPaused, isTimeHidden
         ? <HideTimeVector className='hide-time' />
         : <>
           <h1 className='current-time'>
-            {milisToFormattedTime(currentMilis)}
+            {milisToFormattedTime(currentMilis).substring(1)}
           </h1>
 
           <h2 className='overall-time'>
-            {milisToFormattedTime(overaalMilis)}
+            {milisToFormattedTime(overaalMilis).substring(1)}
           </h2>
         </>
       }
