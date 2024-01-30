@@ -1,18 +1,36 @@
-import { useContext } from 'react';
-import { TimerContext } from '../../../../contexts/timer';
+import { useRef } from 'react';
+import { ITimerQuestionOption } from '../../../../types/timer';
 import Button from '../../../../components/button';
-import TimeOption from './components/time-option';
 import './styles.css';
 
 interface IProps {
   setIsTimeModalOpen: (conditional: boolean) => void;
+  setTimeOption: (option: ITimerQuestionOption) => void;
 }
 
-function QuestionTimeModal({ setIsTimeModalOpen }: IProps) {
-  const { timeOptionInfo } = useContext(TimerContext);
+function QuestionTimeModal({ setIsTimeModalOpen, setTimeOption }: IProps) {
+  const isChosen = useRef<boolean>(false);
+
+  const options: ITimerQuestionOption[] = [
+    {
+      description: 'Enem 1º dia | Linguagens e Humanas (1h30 de Redação): 2m30.',
+      timeLabel: '2m30',
+      milisseconds: 2.5 * 60 * 1000
+    },
+    {
+      description: 'Enem 1º dia | Linguagens e Humanas (1h00 de Redação): 3m00.',
+      timeLabel: '3m00',
+      milisseconds: 3 * 60 * 1000
+    },
+    {
+      description: 'Enem 2º dia | Natureza e Matemática: 3m15.',
+      timeLabel: '3m15',
+      milisseconds: 3.25 * 60 * 1000
+    },
+  ];
 
   function closeModal() {
-    if (!timeOptionInfo)
+    if (!isChosen.current)
       return alert('Selecione ou insira uma duração por questão.');
 
     setIsTimeModalOpen(false);
@@ -24,32 +42,25 @@ function QuestionTimeModal({ setIsTimeModalOpen }: IProps) {
         <h1>Média por questão</h1>
 
         <div className='question-time-options'>
-          <TimeOption
-            title='Enem 2009 - 2023'
-            description='1º dia (Linguagens e Humanas)'
-            extraNote='1h30 de Redação'
-            time='2m30'
-          />
+          {options.map(option => (
+            <button
+              key={option.milisseconds}
+              className='time-option'
+              onClick={() => {
+                isChosen.current = true;
+                setTimeOption(option);
+              }}
+            >
+              <h1>{option.description}</h1>
 
-          <TimeOption
-            title='Enem 2009 - 2023'
-            description='1º dia (Linguagens e Humanas)'
-            extraNote='1h00 de Redação'
-            time='3m00'
-          />
-
-          <TimeOption
-            title='Enem 2009 - 2023'
-            description='2º dia (Matemática e Natureza)'
-            extraNote=''
-            time='3m15'
-          />
+              <span>{option.timeLabel}</span>
+            </button>
+          ))}
         </div>
 
         <Button
           text='Confirmar'
-          shortcut=''
-          primary
+          style={{ backgroundColor: '#120080' }}
           onClick={closeModal}
         />
       </div>
