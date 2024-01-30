@@ -1,25 +1,27 @@
-import { useState, useEffect, useContext } from 'react';
-import { TimerContext } from '../../../../contexts/timer';
+import { useState, useEffect } from 'react';
 import { milisToFormattedTime } from './utils/timer-utils';
 import TimeTable from './components/timetable';
 import Button from '../../../../components/button';
 import Timer from './components/timer';
 import './styles.css';
 
-interface IQuestionTime {
+export interface IQuestionTime {
   current: string;
   overall: string;
 }
 
-function TimerArea() {
-  const [currentMilis, setCurrentMilis] = useState<number>(0);
-  const [overallMilis, setOverallMilis] = useState<number>(0);
+interface IProps {
+  milissecondsPerQuestion: number;
+}
+
+function TimerArea({ milissecondsPerQuestion }: IProps) {
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const [isTimeHidden, setIsTimeHidden] = useState<boolean>(false);
-  const [questionsTime, setQuestionsTime] = useState<IQuestionTime[]>([]);
 
-  const { milissecondsPerQuestion } = useContext(TimerContext);
+  const [currentMilis, setCurrentMilis] = useState<number>(0);
+  const [overallMilis, setOverallMilis] = useState<number>(0);
+  const [questionsTime, setQuestionsTime] = useState<IQuestionTime[]>([]);
 
   function startTimer() {
     setIsRunning(true);
@@ -40,13 +42,11 @@ function TimerArea() {
   }
 
   function nextQuestion() {
-    const currentRest = milissecondsPerQuestion as number - currentMilis;
-    const isCurrentRestPositive = currentRest > 0;
-    let current = `${isCurrentRestPositive ? '+' : '-'}${milisToFormattedTime(currentRest)}`;
+    const currentRest = milissecondsPerQuestion - currentMilis;
+    let current = milisToFormattedTime(currentRest);
 
-    const overallRest = (milissecondsPerQuestion as number * (questionsTime.length + 1)) - overallMilis;
-    const isOverallRestPositive = overallRest > 0;
-    let overall = `${isOverallRestPositive ? '+' : '-'}${milisToFormattedTime(overallRest)}`;
+    const overallRest = (milissecondsPerQuestion * (questionsTime.length + 1)) - overallMilis;
+    let overall = milisToFormattedTime(overallRest);
 
     setQuestionsTime([...questionsTime, { current, overall }]);
     setCurrentMilis(0);
@@ -58,18 +58,14 @@ function TimerArea() {
 
   // timer interval
   useEffect(() => {
-    let intervalId: number | null = null;
-    if (isRunning && !isPaused) {
-      intervalId = setInterval(() => {
+    const intervalId = setInterval(() => {
+      if (isRunning && !isPaused) {
         setCurrentMilis((prevState) => prevState + 10);
         setOverallMilis((prevState) => prevState + 10);
-      }, 10);
-    }
-    else if (intervalId && (!isRunning || isPaused)) {
-      clearInterval(intervalId as number);
-    }
+      }
+    }, 10);
 
-    return () => clearInterval(intervalId as number);
+    return () => clearInterval(intervalId);
   }, [isRunning, isPaused]);
 
   return (
@@ -113,15 +109,16 @@ function TimerArea() {
 
               <Button
                 text='Finalizar'
-                primary
+                style={{ backgroundColor: '#120080' }}
                 shortcut='Enter'
                 onClick={finishTimer}
               />
             </div>
           </div>
         ) : (
-          <Button text='Iniciar'
-            primary
+          <Button
+            text='Iniciar'
+            style={{ backgroundColor: '#120080' }}
             shortcut='Enter'
             onClick={startTimer}
           />
