@@ -1,19 +1,15 @@
+import { ComponentProps } from 'react';
 import './styles.css';
 
-interface IProps {
+interface IProps extends ComponentProps<'button'> {
   text: string;
-  shortcut: string;
-  primary?: boolean;
-  onClick: React.MouseEventHandler<HTMLButtonElement>;
+  shortcut?: string;
 }
 
-function Button({ text, shortcut, primary, onClick }: IProps) {
+function Button({ text, shortcut, ...rest }: IProps) {
   return (
     <div className='button-wrapper'>
-      <button
-        onClick={onClick}
-        style={primary ? { backgroundColor: '#120080' } : {}}
-      >
+      <button {...rest}>
         {text}
       </button>
 
