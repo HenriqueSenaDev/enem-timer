@@ -28,7 +28,7 @@ function Questions() {
           <p>{timeOption.description}</p>
         </div>
 
-        <TimerArea milissecondsPerQuestion={timeOption.milisseconds} />
+        <TimerArea milisPerQuestion={timeOption.milisseconds} />
       </div>
     </div>
   );
