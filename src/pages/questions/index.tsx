@@ -28,7 +28,10 @@ function Questions() {
           <p>{timeOption.description}</p>
         </div>
 
-        <TimerArea milisPerQuestion={timeOption.milisseconds} />
+        <TimerArea
+          milisPerQuestion={timeOption.milisseconds}
+          isTimeModalOpen={isTimeModalOpen}
+        />
       </div>
     </div>
   );

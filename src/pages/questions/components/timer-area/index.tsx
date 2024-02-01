@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRefState } from '../../../../hooks/useRefState';
 import { milisToFormattedTime } from './utils/timer-utils';
 import TimeTable from './components/timetable';
@@ -13,11 +13,13 @@ export interface IQuestionTime {
 
 interface IProps {
   milisPerQuestion: number;
+  isTimeModalOpen: boolean;
 }
 
-function TimerArea({ milisPerQuestion }: IProps) {
+function TimerArea({ milisPerQuestion, isTimeModalOpen }: IProps) {
   // refs only
-  const milisPerQuestionRef = useRef(milisPerQuestion);
+  const milisPerQuestionRef = useRef<number>(milisPerQuestion);
+  const isTimeModalOpenRef = useRef<boolean>(isTimeModalOpen);
 
   // states only
   const [isPaused, setIsPaused] = useState<boolean>(false);
@@ -32,11 +34,14 @@ function TimerArea({ milisPerQuestion }: IProps) {
   const [questionsTime, setQuestionsTime, questionsTimeRef] = useRefState<IQuestionTime[]>([]);
 
   function startTimer() {
+    if (isTimeModalOpenRef.current) return;
     setHasStarted(true);
     setQuestionsTime([]);
   }
 
   function finishTimer() {
+    if (!hasStartedRef.current) return;
+    if (!window.confirm('A questão ativa será perdida. Confirmar?')) return;
     setHasStarted(false);
     setIsPaused(false);
     setCurrentMilis(0);
@@ -45,11 +50,13 @@ function TimerArea({ milisPerQuestion }: IProps) {
   }
 
   function resetQuestion() {
+    if (!hasStartedRef.current) return;
     setOverallMilis(overallMilisRef.current - currentMilisRef.current);
     setCurrentMilis(0);
   }
 
   function nextQuestion() {
+    if (!hasStartedRef.current) return;
     const currentRest = milisPerQuestionRef.current - currentMilisRef.current;
     let current = milisToFormattedTime(currentRest);
 
@@ -67,7 +74,8 @@ function TimerArea({ milisPerQuestion }: IProps) {
   // update ref by props change in question option modal
   useEffect(() => {
     milisPerQuestionRef.current = milisPerQuestion;
-  }, [milisPerQuestion]);
+    isTimeModalOpenRef.current = isTimeModalOpen;
+  }, [milisPerQuestion, isTimeModalOpen]);
 
   // keyboard shortcuts listener
   useEffect(() => {

@@ -30,7 +30,10 @@ function Timer({ currentMilis, overaalMilis, isPaused, setIsPaused, isTimeHidden
       <img
         src={pauseIcon}
         alt='pause timer image'
-        onClick={() => setIsPaused(!isPaused)}
+        onClick={() => {
+          if (overaalMilis == 0) return alert('Inicie para pausar.');
+          setIsPaused(!isPaused);
+        }}
       />
     </div>
   );
