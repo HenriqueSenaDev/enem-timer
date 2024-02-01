@@ -14,12 +14,18 @@ export interface IQuestionTime {
 interface IProps {
   milisPerQuestion: number;
   isTimeModalOpen: boolean;
+  questionsQuantity: number;
 }
 
-function TimerArea({ milisPerQuestion, isTimeModalOpen }: IProps) {
+function TimerArea({
+  milisPerQuestion,
+  isTimeModalOpen,
+  questionsQuantity
+}: IProps) {
   // refs only
   const milisPerQuestionRef = useRef<number>(milisPerQuestion);
   const isTimeModalOpenRef = useRef<boolean>(isTimeModalOpen);
+  const questionsQuantityRef = useRef<number>(questionsQuantity);
 
   // states only
   const [isPaused, setIsPaused] = useState<boolean>(false);
@@ -39,14 +45,22 @@ function TimerArea({ milisPerQuestion, isTimeModalOpen }: IProps) {
     setQuestionsTime([]);
   }
 
-  function finishTimer() {
-    if (!hasStartedRef.current) return;
-    if (!window.confirm('A questão ativa será perdida. Confirmar?')) return;
+  function stopTimer() {
     setHasStarted(false);
     setIsPaused(false);
     setCurrentMilis(0);
     setOverallMilis(0);
     setIsTimeHidden(false);
+  }
+
+  function finishTimer() {
+    if (!hasStartedRef.current) return;
+
+    if (questionsTimeRef.current.length + 1 < questionsQuantityRef.current)
+      if (!confirm('Você ainda tem questões para fazer. Cofirmar?')) return;
+
+    insertQuestion();
+    stopTimer();
   }
 
   function resetQuestion() {
@@ -55,7 +69,7 @@ function TimerArea({ milisPerQuestion, isTimeModalOpen }: IProps) {
     setCurrentMilis(0);
   }
 
-  function nextQuestion() {
+  function insertQuestion() {
     if (!hasStartedRef.current) return;
     const currentRest = milisPerQuestionRef.current - currentMilisRef.current;
     let current = milisToFormattedTime(currentRest);
@@ -65,6 +79,9 @@ function TimerArea({ milisPerQuestion, isTimeModalOpen }: IProps) {
 
     setQuestionsTime([...questionsTimeRef.current, { current, overall }]);
     setCurrentMilis(0);
+
+    if (questionsTimeRef.current.length === questionsQuantityRef.current)
+      stopTimer();
   }
 
   function toggleTimeVisibility() {
@@ -75,7 +92,8 @@ function TimerArea({ milisPerQuestion, isTimeModalOpen }: IProps) {
   useEffect(() => {
     milisPerQuestionRef.current = milisPerQuestion;
     isTimeModalOpenRef.current = isTimeModalOpen;
-  }, [milisPerQuestion, isTimeModalOpen]);
+    questionsQuantityRef.current = questionsQuantity;
+  }, [milisPerQuestion, isTimeModalOpen, questionsQuantity]);
 
   // keyboard shortcuts listener
   useEffect(() => {
@@ -86,7 +104,7 @@ function TimerArea({ milisPerQuestion, isTimeModalOpen }: IProps) {
           else return finishTimer();
         }
         case 'r': return resetQuestion();
-        case ' ': return nextQuestion();
+        case ' ': return insertQuestion();
         case 't': return toggleTimeVisibility();
       }
     }
@@ -137,7 +155,7 @@ function TimerArea({ milisPerQuestion, isTimeModalOpen }: IProps) {
               <Button
                 text='Próxima questão'
                 shortcut='Space Bar'
-                onClick={nextQuestion}
+                onClick={insertQuestion}
               />
             </div>
 
