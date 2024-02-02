@@ -8,16 +8,23 @@ import './styles.css';
 
 function Questions() {
   const [isTimeModalOpen, setIsTimeModalOpen] = useState<boolean>(true);
-  const [questionsQuantity, setQuestionsQuantity] = useState<number>(0);
   const [timeOption, setTimeOption] = useState<ITimerQuestionOption>({
     description: '',
     timeLabel: '',
     milisseconds: 0,
+    questionsQuantity: undefined,
   });
 
   const { pathname } = useLocation();
 
   const isInfinity = useRef<boolean>(pathname === '/questions/infinity');
+
+  function handleSetQuantity(qnt: number) {
+    setTimeOption(prev => ({
+      ...prev,
+      questionsQuantity: qnt
+    }));
+  }
 
   return (
     <div className='questions-wrapper'>
@@ -28,8 +35,8 @@ function Questions() {
         />
       )}
 
-      {(!isInfinity.current && !questionsQuantity) && (
-        <QuantityModal setQuantity={setQuestionsQuantity} />
+      {(!isInfinity.current && !timeOption.questionsQuantity) && (
+        <QuantityModal setQuantity={handleSetQuantity} />
       )}
 
       <div className='questions-container'>
@@ -37,8 +44,7 @@ function Questions() {
           <h1>
             {isInfinity.current
               ? 'Questões Infinitas'
-              : `${questionsQuantity}
-              quest${questionsQuantity > 1 ? 'ões' : 'ão'}`
+              : `${timeOption.questionsQuantity || 0} questões`
             }
           </h1>
 
@@ -47,8 +53,9 @@ function Questions() {
 
         <TimerArea
           milisPerQuestion={timeOption.milisseconds}
+          questionsQuantity={timeOption.questionsQuantity}
           isTimeModalOpen={isTimeModalOpen}
-          questionsQuantity={questionsQuantity}
+          isInfinity={isInfinity.current}
         />
       </div>
     </div>
