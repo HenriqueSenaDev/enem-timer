@@ -5,7 +5,7 @@ export interface ITimerQuestionOption {
   questionsQuantity?: number;
 }
 
-export interface QuestionTime {
+export interface IQuestionTime {
   current: string;
   overall: string;
 }
@@ -14,6 +14,6 @@ export interface IQuestionTimerState {
   isPaused: boolean;
   currentMilis: number;
   overallMilis: number;
-  questions: QuestionTime[];
+  questions: IQuestionTime[];
   milisPerQuestion: number,
 }

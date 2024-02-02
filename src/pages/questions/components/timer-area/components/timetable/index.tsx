@@ -1,4 +1,4 @@
-import { IQuestionTime } from '../..';
+import { IQuestionTime } from '../../../../../../types/timer';
 import { ReactComponent as HideTableVector } from '../../../../../../assets/hide-table.svg';
 import './styles.css';
 
