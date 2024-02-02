@@ -1,110 +1,108 @@
-import { useEffect, useRef, useState } from 'react';
+import { QuestionTimeManager } from '../../../../jobs/question-time-manager';
+import { IQuestionTimerState } from '../../../../types/timer';
 import { useRefState } from '../../../../hooks/useRefState';
-import { milisToFormattedTime } from './utils/timer-utils';
+import { useEffect, useRef } from 'react';
 import TimeTable from './components/timetable';
 import Button from '../../../../components/button';
 import Timer from './components/timer';
 import './styles.css';
 
-export interface IQuestionTime {
-  current: string;
-  overall: string;
-}
-
 interface IProps {
   milisPerQuestion: number;
   isTimeModalOpen: boolean;
-  questionsQuantity: number;
+  questionsQuantity: number | undefined;
+  isInfinity: boolean;
 }
 
 function TimerArea({
   milisPerQuestion,
   isTimeModalOpen,
-  questionsQuantity
+  questionsQuantity,
+  isInfinity
 }: IProps) {
-  // refs only
-  const milisPerQuestionRef = useRef<number>(milisPerQuestion);
+  // custom useRefState
+  // handle dom event listeners and ui react
+  const [isTimeHidden, setIsTimeHidden, isTimeHiddenRef] =
+    useRefState<boolean>(false);
+
+  const [timerState, setTimerState, timerStateRef] =
+    useRefState<IQuestionTimerState>({
+      isRunning: false,
+      isPaused: false,
+      currentMilis: 0,
+      overallMilis: 0,
+      questions: [],
+      milisPerQuestion,
+    });
+
+  // refs
   const isTimeModalOpenRef = useRef<boolean>(isTimeModalOpen);
-  const questionsQuantityRef = useRef<number>(questionsQuantity);
+  const questionsQuantityRef = useRef<number | undefined>(questionsQuantity);
 
-  // states only
-  const [isPaused, setIsPaused] = useState<boolean>(false);
+  const timerManager = useRef<QuestionTimeManager>(
+    new QuestionTimeManager(setTimerState, timerStateRef)
+  );
 
-  // custom useRefState: handle dom event listeners
-  const [hasStarted, setHasStarted, hasStartedRef] = useRefState<boolean>(false);
-  const [isTimeHidden, setIsTimeHidden, isTimeHiddenRef] = useRefState<boolean>(false);
-
-  const [currentMilis, setCurrentMilis, currentMilisRef] = useRefState<number>(0);
-  const [overallMilis, setOverallMilis, overallMilisRef] = useRefState<number>(0);
-
-  const [questionsTime, setQuestionsTime, questionsTimeRef] = useRefState<IQuestionTime[]>([]);
-
-  function startTimer() {
+  function handleStart() {
     if (isTimeModalOpenRef.current) return;
-    setHasStarted(true);
-    setQuestionsTime([]);
+    if (!questionsQuantity && !isInfinity) return;
+    timerManager.current.startTimer();
   }
 
-  function stopTimer() {
-    setHasStarted(false);
-    setIsPaused(false);
-    setCurrentMilis(0);
-    setOverallMilis(0);
-    setIsTimeHidden(false);
+  function handleNextQuestion() {
+    if (isTimeModalOpenRef.current) return;
+
+    if (questionsQuantityRef.current
+      && timerState.questions.length + 1 === questionsQuantityRef.current)
+      return timerManager.current.finishTimer();
+
+    timerManager.current.insertQuestion();
   }
 
-  function finishTimer() {
-    if (!hasStartedRef.current) return;
+  function handleFinish() {
+    if (questionsQuantityRef.current
+      && timerState.questions.length + 1 < questionsQuantityRef.current) {
+      if (!confirm('Você ainda tem questões para fazer. Confirmar?')) return;
+    }
 
-    if (questionsTimeRef.current.length + 1 < questionsQuantityRef.current)
-      if (!confirm('Você ainda tem questões para fazer. Cofirmar?')) return;
-
-    insertQuestion();
-    stopTimer();
+    timerManager.current.finishTimer();
+    setIsTimeHidden(false)
   }
 
-  function resetQuestion() {
-    if (!hasStartedRef.current) return;
-    setOverallMilis(overallMilisRef.current - currentMilisRef.current);
-    setCurrentMilis(0);
+  function handleReset() {
+    timerManager.current.resetQuestion();
   }
 
-  function insertQuestion() {
-    if (!hasStartedRef.current) return;
-    const currentRest = milisPerQuestionRef.current - currentMilisRef.current;
-    let current = milisToFormattedTime(currentRest);
-
-    const overallRest = (milisPerQuestionRef.current * (questionsTimeRef.current.length + 1)) - overallMilisRef.current;
-    let overall = milisToFormattedTime(overallRest);
-
-    setQuestionsTime([...questionsTimeRef.current, { current, overall }]);
-    setCurrentMilis(0);
-
-    if (questionsTimeRef.current.length === questionsQuantityRef.current)
-      stopTimer();
+  function handleTogglePause() {
+    timerManager.current.togglePause();
   }
 
   function toggleTimeVisibility() {
+    if (isTimeModalOpenRef.current) return;
     setIsTimeHidden(!isTimeHiddenRef.current);
   }
 
   // update ref by props change in question option modal
   useEffect(() => {
-    milisPerQuestionRef.current = milisPerQuestion;
+    setTimerState({
+      ...timerState,
+      milisPerQuestion,
+    });
+
     isTimeModalOpenRef.current = isTimeModalOpen;
     questionsQuantityRef.current = questionsQuantity;
-  }, [milisPerQuestion, isTimeModalOpen, questionsQuantity]);
+  }, [milisPerQuestion, questionsQuantity, isTimeModalOpen]);
 
   // keyboard shortcuts listener
   useEffect(() => {
     function execKeyboardShortcut(evt: KeyboardEvent) {
       switch (evt.key) {
         case 'Enter': {
-          if (!hasStartedRef.current) return startTimer();
-          else return finishTimer();
+          if (!timerStateRef.current.isRunning) return handleStart();
+          else return handleFinish();
         }
-        case 'r': return resetQuestion();
-        case ' ': return insertQuestion();
+        case 'r': return handleReset();
+        case ' ': return handleNextQuestion();
         case 't': return toggleTimeVisibility();
       }
     }
@@ -113,49 +111,48 @@ function TimerArea({
 
     return () => window
       .removeEventListener('keypress', execKeyboardShortcut);
-  }, []);
+  });
 
   // timer interval
   useEffect(() => {
     const intervalId = setInterval(() => {
-      if (hasStarted && !isPaused) {
-        setCurrentMilis(currentMilisRef.current + 10);
-        setOverallMilis(overallMilisRef.current + 10);
+      if (timerState.isRunning && !timerState.isPaused) {
+        timerManager.current!.incrementTime(10);
       }
     }, 10);
 
     return () => clearInterval(intervalId);
-  }, [hasStarted, isPaused]);
+  }, [timerState.isRunning, timerState.isPaused]);
 
   return (
     <div className='timer-area'>
       <Timer
-        currentMilis={currentMilis}
-        overaalMilis={overallMilis}
-        isPaused={isPaused}
-        setIsPaused={setIsPaused}
+        currentMilis={timerState.currentMilis}
+        overaalMilis={timerState.overallMilis}
+        isPaused={timerState.isPaused}
+        setIsPaused={handleTogglePause}
         isTimeHidden={isTimeHidden}
       />
 
       <TimeTable
-        questionsTime={questionsTime}
+        questionsTime={timerState.questions}
         isTimeHidden={isTimeHidden}
       />
 
       <div className='timer-buttons'>
-        {hasStarted ? (
+        {timerState.isRunning ? (
           <div className='timer-options-area'>
             <div className='options-row'>
               <Button
                 text='Resetar questão'
                 shortcut='R'
-                onClick={resetQuestion}
+                onClick={handleReset}
               />
 
               <Button
                 text='Próxima questão'
                 shortcut='Space Bar'
-                onClick={insertQuestion}
+                onClick={handleNextQuestion}
               />
             </div>
 
@@ -170,7 +167,7 @@ function TimerArea({
                 text='Finalizar'
                 style={{ backgroundColor: '#120080' }}
                 shortcut='Enter'
-                onClick={finishTimer}
+                onClick={handleFinish}
               />
             </div>
           </div>
@@ -179,7 +176,7 @@ function TimerArea({
             text='Iniciar'
             style={{ backgroundColor: '#120080' }}
             shortcut='Enter'
-            onClick={startTimer}
+            onClick={handleStart}
           />
         )}
       </div>
