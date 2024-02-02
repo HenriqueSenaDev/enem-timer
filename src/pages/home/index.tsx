@@ -6,7 +6,6 @@ import leftArrow from '../../assets/left-arrow.svg';
 import questionsIcon from '../../assets/questions.svg';
 import infinityIcon from '../../assets/infinity.svg';
 import essayIcon from '../../assets/essay.svg';
-import './styles.css';
 
 function Home() {
   const [isDesktop, setIsDesktop] = useState<boolean>(
@@ -44,25 +43,27 @@ function Home() {
 
   return (
     <div>
-      <div className='home-container'>
-        <h1 className='main-header'>Enem Timer</h1>
+      <div className='flex flex-col items-center justify-center text-center h-[100vh] pt-[10vh] overflow-hidden relative lg:pt-16'>
+        <h1 className='text-[34px] font-normal min-[390px]:text-[40px] md:text-[52px] lg:mb-[1%]'>
+          Enem Timer
+        </h1>
 
         {!isDesktop && currentCardIndex > 0 && (
           <img
-            className='card-left-arrow'
+            className='absolute aspect-square w-[34px] cursor-pointer -translate-x-[140px] min-[360px]:-translate-x-[160px] md:-translate-x-[180px] lg:hidden'
             src={leftArrow}
             alt='left arrow'
             onClick={() => setCurrentCardIndex(currentCardIndex - 1)}
           />
         )}
 
-        <div className='home-cards-area'>
+        <div className='flex items-center justify-center flex-1 w-full lg:gap-[74px]'>
           {isDesktop ? cards : cards[currentCardIndex]}
         </div>
 
         {!isDesktop && currentCardIndex < 2 && (
           <img
-            className='card-right-arrow'
+            className='absolute aspect-square w-[34px] cursor-pointer translate-x-[140px] min-[360px]:translate-x-[160px] md:translate-x-[180px] lg:hidden'
             src={rightArrow}
             alt='right arrow'
             onClick={() => setCurrentCardIndex(currentCardIndex + 1)}
