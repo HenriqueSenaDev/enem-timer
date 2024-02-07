@@ -5,7 +5,6 @@ import { useEffect, useRef } from 'react';
 import TimeTable from './components/timetable';
 import Button from '../../../../components/button';
 import Timer from './components/timer';
-import './styles.css';
 
 interface IProps {
   milisPerQuestion: number;
@@ -125,7 +124,7 @@ function TimerArea({
   }, [timerState.isRunning, timerState.isPaused]);
 
   return (
-    <div className='timer-area'>
+    <div className='flex flex-col items-center justify-between px-5 pt-[38px] flex-1 relative w-full max-w-[300px] lg:justify-center lg:p-0 lg:max-h-[400px] lg:my-auto lg:max-w-[800px]'>
       <Timer
         currentMilis={timerState.currentMilis}
         overaalMilis={timerState.overallMilis}
@@ -139,10 +138,10 @@ function TimerArea({
         isTimeHidden={isTimeHidden}
       />
 
-      <div className='timer-buttons'>
+      <div className='w-full flex items-center justify-center lg:absolute lg:bottom-0 lg:left-0 lg:max-w-[372px] lg:h-[150px]'>
         {timerState.isRunning ? (
-          <div className='timer-options-area'>
-            <div className='options-row'>
+          <div className='w-full flex flex-col items-center gap-[26px] lg:max-w-[320px]'>
+            <div className='w-full flex items-center justify-center gap-6'>
               <Button
                 text='Resetar questão'
                 shortcut='R'
@@ -156,7 +155,7 @@ function TimerArea({
               />
             </div>
 
-            <div className='options-row'>
+            <div className='w-full flex items-center justify-center gap-6'>
               <Button
                 text={`${isTimeHidden ? 'Revelar' : 'Esconder'} tempo`}
                 shortcut='T'
