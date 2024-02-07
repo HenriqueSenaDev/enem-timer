@@ -1,7 +1,6 @@
 import { milisToFormattedTime } from '../../utils/timer-utils';
 import { ReactComponent as HideTimeVector } from '../../../../../../assets/hide-time.svg';
 import pauseIcon from '../../../../../../assets/pause.svg';
-import "./styles.css";
 
 interface IProps {
   currentMilis: number;
@@ -13,21 +12,22 @@ interface IProps {
 
 function Timer({ currentMilis, overaalMilis, isPaused, setIsPaused, isTimeHidden }: IProps) {
   return (
-    <div className='timer-container'>
+    <div className="flex flex-col items-center justify-center font-['IBM_Plex_Mono'] leading-[1.2] tracking-[1px] relative h-[190px] lg:absolute lg:top-0 lg:left-0">
       {isTimeHidden
-        ? <HideTimeVector className='hide-time' />
+        ? <HideTimeVector className='h-[130%] w-auto lg:scale-[1.2] -translate-y-[10%]' />
         : <>
-          <h1 className='current-time'>
+          <h1 className='text-[52px] font-light lg:text-[76px]'>
             {milisToFormattedTime(currentMilis).substring(1)}
           </h1>
 
-          <h2 className='overall-time'>
+          <h2 className='text-[30px] font-light opacity-75 lg:text-5xl'>
             {milisToFormattedTime(overaalMilis).substring(1)}
           </h2>
         </>
       }
 
       <img
+        className='mt-[10px] w-5 h-auto cursor-pointer lg:w-7'
         src={pauseIcon}
         alt='pause timer image'
         onClick={() => {
