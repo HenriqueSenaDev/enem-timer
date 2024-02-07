@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { ITimerQuestionOption } from '../../../../types/timer';
-import { questionTimeMask, timeLabelToMilis } from './utils/components';
+import { questionTimeMask } from '../../../../utils/masks/questions';
+import { unformatQuestionMillis } from '../../../../utils/unformatters/questions';
 import Button from '../../../../components/button';
 
 interface IProps {
@@ -45,7 +46,7 @@ function QuestionTimeModal({ setIsTimeModalOpen, setTimeOption }: IProps) {
     chosenOptionRef.current = {
       description: `Customizado: ${time}`,
       timeLabel: time,
-      milisseconds: timeLabelToMilis(time)
+      milisseconds: unformatQuestionMillis(time)
     }
   }
 
