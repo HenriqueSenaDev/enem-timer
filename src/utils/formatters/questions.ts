@@ -1,16 +1,5 @@
 import { doubleDigitCheck } from "../masks/common";
-
-export function extractTimeUnits(questionMillis: number) {
-  let minutes = Math.floor(questionMillis / 1000 / 60);
-  minutes = minutes < 0 ? 0 : minutes;
-
-  let seconds = Math.floor((questionMillis - (1000 * 60 * minutes)) / 1000);
-  seconds = seconds < 0 ? 0 : seconds
-
-  let milisseconds = questionMillis - ((1000 * 60 * minutes) + (1000 * seconds));
-
-  return { minutes, seconds, milisseconds };
-}
+import { extractTimeUnits } from "./common";
 
 export function formatQuestionMillis(milissecondsRest: number) {
   let questionMillis: number = milissecondsRest;
