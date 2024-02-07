@@ -4,7 +4,6 @@ import { useLocation } from 'react-router-dom';
 import QuestionTimeModal from './components/question-time-modal';
 import QuantityModal from './components/quantity-modal';
 import TimerArea from './components/timer-area';
-import './styles.css';
 
 function Questions() {
   const [isTimeModalOpen, setIsTimeModalOpen] = useState<boolean>(true);
@@ -27,7 +26,7 @@ function Questions() {
   }
 
   return (
-    <div className='questions-wrapper'>
+    <div className='flex justify-center items-center flex-col'>
       {isTimeModalOpen && (
         <QuestionTimeModal
           setIsTimeModalOpen={setIsTimeModalOpen}
@@ -39,16 +38,18 @@ function Questions() {
         <QuantityModal setQuantity={handleSetQuantity} />
       )}
 
-      <div className='questions-container'>
-        <div className='questions-header'>
-          <h1>
+      <div className='w-full px-[22px] pt-[22px] pb-9 min-h-[100vh] flex flex-col items-center lg:pt-8 lg:pb-[5%] lg:max-w-[900px] xl:max-w-[1000px] 2xl:max-w-[1160px]'>
+        <div className='self-baseline'>
+          <h1 className='text-lg font-normal mb-2 lg:text-2xl'>
             {isInfinity.current
               ? 'Questões Infinitas'
               : `${timeOption.questionsQuantity || 0} questões`
             }
           </h1>
 
-          <p>{timeOption.description}</p>
+          <p className='text-xs lg:text-[15px]'>
+            {timeOption.description}
+          </p>
         </div>
 
         <TimerArea
