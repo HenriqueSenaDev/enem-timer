@@ -1,5 +1,5 @@
-import { milisToFormattedTime } from '../../utils/timer-utils';
 import { ReactComponent as HideTimeVector } from '../../../../../../assets/hide-time.svg';
+import { formatQuestionMillis } from '../../../../../../utils/formatters/questions';
 import pauseIcon from '../../../../../../assets/pause.svg';
 
 interface IProps {
@@ -17,11 +17,11 @@ function Timer({ currentMilis, overaalMilis, isPaused, setIsPaused, isTimeHidden
         ? <HideTimeVector className='h-[130%] w-auto lg:scale-[1.2] -translate-y-[10%]' />
         : <>
           <h1 className='text-[52px] font-light lg:text-[76px]'>
-            {milisToFormattedTime(currentMilis).substring(1)}
+            {formatQuestionMillis(currentMilis).substring(1)}
           </h1>
 
           <h2 className='text-[30px] font-light opacity-75 lg:text-5xl'>
-            {milisToFormattedTime(overaalMilis).substring(1)}
+            {formatQuestionMillis(overaalMilis).substring(1)}
           </h2>
         </>
       }
