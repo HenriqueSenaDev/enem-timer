@@ -2,7 +2,6 @@ import { useRef, useState } from 'react';
 import { ITimerQuestionOption } from '../../../../types/timer';
 import { questionTimeMask, timeLabelToMilis } from './utils/components';
 import Button from '../../../../components/button';
-import './styles.css';
 
 interface IProps {
   setIsTimeModalOpen: (conditional: boolean) => void;
@@ -64,29 +63,38 @@ function QuestionTimeModal({ setIsTimeModalOpen, setTimeOption }: IProps) {
   }
 
   return (
-    <div className='question-time-modal-wrapper'>
-      <div className='question-time-modal'>
-        <h1>Média por questão</h1>
+    <div className='w-full h-full flex items-center justify-center absolute bg-[rgba(0,0,0,0.3)] z-[2] p-5'>
+      <div className='w-full max-w-[342px] bg-[#080C33] rounded-[10px] flex flex-col items-center justify-center pt-[22px] pb-[26px] lg:py-[30px] lg:px-0 lg:max-w-[540px]'>
+        <h1 className='text-base font-normal lg:text-[19px]'>
+          Média por questão
+        </h1>
 
-        <div className='question-time-options'>
+        <div className='w-full my-[22px] flex flex-col items-center justify-center cursor-pointer lg:mt-9 lg:mb-10'>
           {options.map(option => (
             <button
               key={option.milisseconds}
-              className='time-option'
+              className="w-full flex justify-between items-center py-[10px] px-7 bg-[#080C33] text-[white] outline-none border-none cursor-pointer font-['Montserrat'] lg:py-5 lg:px-7 focus:bg-[#121a62] hover:bg-[#121a62]"
               onClick={() => {
                 chosenOptionRef.current = option;
               }}
             >
-              <h1>{option.description}</h1>
+              <h1 className='text-sm text-left max-w-[170px] lg:text-base lg:max-w-[unset]'>
+                {option.description}
+              </h1>
 
-              <span>{option.timeLabel}</span>
+              <span className='text-[15px] font-light underline underline-offset-4'>
+                {option.timeLabel}
+              </span>
             </button>
           ))}
 
-          <button className='time-option'>
-            <h1>Customizado</h1>
+          <button className="w-full flex justify-between items-center py-[10px] px-7 bg-[#080C33] text-[white] outline-none border-none cursor-pointer font-['Montserrat'] lg:py-5 lg:px-7 focus:bg-[#121a62] hover:bg-[#121a62]">
+            <h1 className='text-sm text-left max-w-[170px] lg:text-base lg:max-w-[unset]'>
+              Customizado
+            </h1>
 
             <input
+              className="max-w-[75px] flex justify-center items-center p-[10px] bg-[#13174B] text-white text-sm outline-none border-none rounded-[15px] font-['Montserrat']"
               type="text"
               placeholder='00m00'
               value={customTime}
