@@ -12,9 +12,9 @@ interface IProps {
 
 function Timer({ currentMilis, overaalMilis, isPaused, setIsPaused, isTimeHidden }: IProps) {
   return (
-    <div className="flex flex-col items-center justify-center font-['IBM_Plex_Mono'] leading-[1.2] tracking-[1px] relative h-[190px] lg:absolute lg:top-0 lg:left-0">
+    <div className="flex flex-col items-center justify-center font-['IBM_Plex_Mono'] leading-[1.2] tracking-[1px] relative h-[190px] lg:absolute lg:top-0 lg:left-0 lg:w-[372px]">
       {isTimeHidden
-        ? <HideTimeVector className='h-[130%] w-auto lg:scale-[1.2] -translate-y-[10%]' />
+        ? <HideTimeVector className='h-[130%] w-auto lg:scale-[1.2] -translate-y-[10%] lg:m-auto' />
         : <>
           <h1 className='text-[52px] font-light lg:text-[76px]'>
             {formatQuestionMillis(currentMilis).substring(1)}
