@@ -44,9 +44,6 @@ export class EssayTimeManager {
   }
 
   resetTimer() {
-    const { isRunning } = this.stateRef.current;
-    if (!isRunning) throw new Error('Tempo não iniciado');
-
     this.updateState({
       ...this.stateRef.current,
       currentMilis: 0,
@@ -58,15 +55,12 @@ export class EssayTimeManager {
       ...this.stateRef.current,
       isRunning: false,
       isPaused: false,
-      currentMilis: 0,
     });
   }
 
   finishTimer() {
-    const { isRunning, currentMilis, duration } = this.stateRef.current;
+    const { isRunning } = this.stateRef.current;
     if (!isRunning) throw new Error('Tempo não iniciado');
-
-    alert(`Saldo de ${duration - currentMilis} milissegundos.`);
 
     this.stopTimer();
 
