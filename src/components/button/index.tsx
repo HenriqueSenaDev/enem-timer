@@ -7,9 +7,9 @@ interface IProps extends ComponentProps<'button'> {
 
 function Button({ text, shortcut, className, ...rest }: IProps) {
   return (
-    <div className='flex flex-col items-center justify-center w-[50%] lg:gap-[6px]'>
+    <div className='flex flex-col items-center justify-center lg:gap-[6px]'>
       <button
-        className={`${className} text-[11px] bg-[#13174B] py-[7px] px-[10px] rounded-lg max-w-[115px] text-white border-0 cursor-pointer w-full font-['Poppins'] lg:text-[12.5px] lg:py-[9px] lg:max-w-[140px]`}
+        className={`${className} text-[11px] bg-[#13174B] hover:bg-opacity-80 py-2 px-6 rounded-lg text-white border-0 cursor-pointer w-full font-['Poppins'] lg:text-[12.5px] lg:py-[9px]`}
         {...rest}
       >
         {text}

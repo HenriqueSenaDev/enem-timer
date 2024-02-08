@@ -143,12 +143,14 @@ function TimerArea({
           <div className='w-full flex flex-col items-center gap-[26px] lg:max-w-[320px]'>
             <div className='w-full flex items-center justify-center gap-6'>
               <Button
+                className='text-xs lg:text-base w-[110px] lg:w-[140px]'
                 text='Resetar questão'
                 shortcut='R'
                 onClick={handleReset}
               />
 
               <Button
+                className='text-xs lg:text-base w-[110px] lg:w-[140px]'
                 text='Próxima questão'
                 shortcut='Space Bar'
                 onClick={handleNextQuestion}
@@ -157,12 +159,14 @@ function TimerArea({
 
             <div className='w-full flex items-center justify-center gap-6'>
               <Button
+                className='text-xs lg:text-base w-[110px] lg:w-[140px]'
                 text={`${isTimeHidden ? 'Revelar' : 'Esconder'} tempo`}
                 shortcut='T'
                 onClick={toggleTimeVisibility}
               />
 
               <Button
+                className='text-xs lg:text-base w-[110px] lg:w-[140px]'
                 text='Finalizar'
                 style={{ backgroundColor: '#120080' }}
                 shortcut='Enter'
@@ -172,6 +176,7 @@ function TimerArea({
           </div>
         ) : (
           <Button
+            className='text-xs lg:text-base'
             text='Iniciar'
             style={{ backgroundColor: '#120080' }}
             shortcut='Enter'
