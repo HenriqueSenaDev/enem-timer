@@ -73,6 +73,25 @@ function EssayTimerArea({ duration }: IProps) {
     return alert(`Você ${isPositive ? 'adiantou' : 'atrasou'} o tempo em ${hoursLabel}${minutesLabel}${secondsLabel}`);
   }
 
+  // keyboard shortcuts listener
+  useEffect(() => {
+    function execKeyboardShortcut(evt: KeyboardEvent) {
+      switch (evt.key) {
+        case 'Enter': {
+          if (!timerStateRef.current.isRunning) return handleStart();
+          else return handleFinish();
+        }
+        case 'r': return handleReset();
+        case 't': return toggleTimeVisibility();
+      }
+    }
+
+    window.addEventListener('keypress', execKeyboardShortcut);
+
+    return () => window
+      .removeEventListener('keypress', execKeyboardShortcut);
+  });
+
   // update ref by props change in modal
   useEffect(() => {
     setTimerState({
