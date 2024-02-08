@@ -1,6 +1,6 @@
 import { MutableRefObject } from "react";
-import { milisToFormattedTime } from "../pages/questions/components/timer-area/utils/timer-utils";
 import { IQuestionTimerState } from "../types/timer";
+import { formatQuestionMillis } from "../utils/formatters/questions";
 
 interface IQuestionTimeManagerOptions {
   onFinish?: (state: IQuestionTimerState) => void;
@@ -48,10 +48,10 @@ export class QuestionTimeManager {
     if (!isRunning) throw new Error('Tempo não iniciado.');
 
     const currentRest = milisPerQuestion - currentMilis;
-    const current = milisToFormattedTime(currentRest);
+    const current = formatQuestionMillis(currentRest);
 
     const overallRest = (milisPerQuestion * (questions.length + 1)) - overallMilis;
-    const overall = milisToFormattedTime(overallRest);
+    const overall = formatQuestionMillis(overallRest);
 
     this.updateState({
       ...this.stateRef.current,
