@@ -124,7 +124,7 @@ function TimerArea({
   }, [timerState.isRunning, timerState.isPaused]);
 
   return (
-    <div className='flex flex-col items-center justify-between px-5 pt-[38px] flex-1 relative w-full max-w-[300px] lg:justify-center lg:p-0 lg:max-h-[400px] lg:my-auto lg:max-w-[800px]'>
+    <div className='flex flex-col items-center justify-center gap-5 px-5 pt-[38px] flex-1 relative w-full max-w-[300px] lg:justify-center lg:p-0 lg:max-h-[400px] lg:my-auto lg:max-w-[800px]'>
       <Timer
         currentMilis={timerState.currentMilis}
         overaalMilis={timerState.overallMilis}
@@ -138,7 +138,7 @@ function TimerArea({
         isTimeHidden={isTimeHidden}
       />
 
-      <div className='w-full flex items-center justify-center lg:absolute lg:bottom-0 lg:left-0 lg:max-w-[372px] lg:h-[150px]'>
+      <div className='w-full flex items-center justify-center mt-5 lg:absolute lg:bottom-0 lg:left-0 lg:max-w-[372px] lg:h-[150px]'>
         {timerState.isRunning ? (
           <div className='w-full flex flex-col items-center gap-[26px] lg:max-w-[320px]'>
             <div className='w-full flex items-center justify-center gap-6'>
